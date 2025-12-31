@@ -1,90 +1,63 @@
-import time
-import pandas as pd
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
-import urllib.parse
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saludo Consorcio BFTEL</title>
 
-# 📄 Ruta del archivo Excel
-excel_path = r"C:\Users\LENOVO\Desktop\William Herrrera\SEPTIEMBRE\CARNETS\CARNETIZACION.xlsx"
+<style>
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg, #0b1c2d, #123a5f);
+    color: #ffffff;
+}
+.container {
+    max-width: 600px;
+    margin: auto;
+    padding: 30px 20px;
+    text-align: center;
+}
+h1 {
+    color: #ffd700;
+    font-size: 2.2em;
+    margin-bottom: 15px;
+}
+p {
+    font-size: 1.05em;
+    line-height: 1.6;
+}
+.card {
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 20px;
+}
+.footer {
+    margin-top: 30px;
+    font-size: 0.9em;
+    opacity: 0.85;
+}
+</style>
+</head>
 
-# 🌐 LINK DEL SALUDO (GitHub Pages)
-saludo_link = "https://willher1984.github.io/SALUDO-CONSORCIO/"
+<body>
+<div class="container">
 
-# 📘 Cargar archivo
-df = pd.read_excel(excel_path)
+    <h1>🎄 Feliz Navidad 🎄</h1>
 
-# ⚙️ Configuración de Chrome
-options = Options()
-options.add_experimental_option("detach", True)
-options.add_argument("--start-maximized")
+    <div class="card">
+        <p>
+            En <strong>Consorcio BFTEL</strong> agradecemos tu confianza.<br><br>
+            Que esta Navidad esté llena de paz, unión y esperanza,<br>
+            y que el nuevo año llegue con prosperidad y nuevos logros.
+        </p>
+    </div>
 
-# 🚀 Iniciar navegador
-driver = webdriver.Chrome(
-    service=Service(ChromeDriverManager().install()),
-    options=options
-)
+    <div class="footer">
+        ✨ Consorcio BFTEL ✨
+    </div>
 
-# 🌐 Abrir WhatsApp Web
-driver.get("https://web.whatsapp.com/")
-print("📱 Escanea el código QR con tu celular para iniciar sesión...")
-time.sleep(25)
-
-# 🔁 Enviar mensajes
-for i, row in df.iterrows():
-    numero = str(row["NUMERO DE CEL"]).strip()
-    nombre = str(row.iloc[2]).strip()  # Columna C
-
-    if not numero.isdigit():
-        print(f"⚠️ Número inválido en fila {i+2}: {numero}")
-        df.at[i, "ENVIADO"] = "❌ Número inválido"
-        continue
-
-    mensaje = (
-        f"Hola {nombre} 👋\n\n"
-        f"Te saludamos desde *Consorcio BFTEL* 🎄✨\n\n"
-        f"Preparamos un mensaje especial para esta temporada:\n\n"
-        f"👉 {saludo_link}\n\n"
-        f"*Feliz Navidad y próspero Año Nuevo* 🎁🎆\n"
-        f"*Consorcio BFTEL*"
-    )
-
-    mensaje_encoded = urllib.parse.quote(mensaje)
-
-    link = (
-        "https://web.whatsapp.com/send?"
-        f"phone=57{numero}&"
-        f"text={mensaje_encoded}"
-    )
-
-    driver.get(link)
-
-    try:
-        # ⌨️ Esperar caja de texto
-        textbox = WebDriverWait(driver, 25).until(
-            EC.presence_of_element_located((By.XPATH, '//div[@role="textbox"]'))
-        )
-        time.sleep(2)
-
-        # 📤 Enviar mensaje
-        textbox.send_keys("\n")
-
-        print(f"✅ Mensaje enviado a {nombre} ({numero})")
-        df.at[i, "ENVIADO"] = "✅ Enviado"
-
-    except Exception as e:
-        print(f"❌ Error enviando a {numero}: {e}")
-        df.at[i, "ENVIADO"] = "❌ Error"
-
-    time.sleep(5)
-
-# 💾 Guardar resultados
-df.to_excel(excel_path, index=False)
-print("📄 Envíos finalizados. Revisa la columna 'ENVIADO' en tu Excel.")
-
-
-
+</div>
+</body>
+</html>
